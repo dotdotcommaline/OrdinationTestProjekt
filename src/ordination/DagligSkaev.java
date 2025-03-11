@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class DagligSkaev extends Ordination {
-    private ArrayList<Dosis> dosiser = new ArrayList<Dosis>();
+    private ArrayList<Dosis> doser = new ArrayList<Dosis>();
 
 
     public DagligSkaev(LocalDate startDato, LocalDate slutDato, Patient patient) {
@@ -14,11 +14,15 @@ public class DagligSkaev extends Ordination {
     // TODO
 
 
+    public ArrayList<Dosis> getDoser() {
+        return doser;
+    }
+
     public void opretDosis(LocalTime tid, double antal) {
         // TODO
         int antalNuværendeDosis = 0;
 
-        for (Dosis dosis : dosiser) {
+        for (Dosis dosis : doser) {
             antalNuværendeDosis += dosis.getAntal();
         }
 
@@ -28,21 +32,26 @@ public class DagligSkaev extends Ordination {
             return;
         }
 
-        dosiser.add(new Dosis(tid, antal));
+        doser.add(new Dosis(tid, antal));
     }
 
     @Override
     public double samletDosis() {
-        return 0;
+        double samletDosis = 0;
+
+        for (Dosis dosis : doser) {
+            samletDosis += dosis.getAntal();
+        }
+        return  samletDosis;
     }
 
     @Override
     public double doegnDosis() {
-        return 0;
+        return samletDosis() / antalDage();
     }
 
     @Override
     public String getType() {
-        return "";
+        return "Daglig Skaev";
     }
 }

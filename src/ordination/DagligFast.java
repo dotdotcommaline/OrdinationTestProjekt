@@ -4,22 +4,22 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class DagligFast extends Ordination {
-    private Dosis[] dosiser = new Dosis[4];
+    private Dosis[] doser = new Dosis[4];
 
 
     public DagligFast(LocalDate startDato, LocalDate slutDato, Patient patient) {
         super(startDato, slutDato, patient);
     }
 
-    public Dosis[] getDosiser() {
-        return dosiser;
+    public Dosis[] getDoser() {
+        return doser;
     }
 
     public void opretDosis(LocalTime tid, double antal) {
         // TODO
         int antalNuværendeDosis = 0;
 
-        for (Dosis dosis : dosiser) {
+        for (Dosis dosis : doser) {
             antalNuværendeDosis += dosis.getAntal();
         }
 
@@ -29,9 +29,9 @@ public class DagligFast extends Ordination {
             return;
         }
 
-        for (int i = 0; i < dosiser.length; i++) {
-            if (dosiser[i] == null) {
-                dosiser[i] = new Dosis(tid, antal);
+        for (int i = 0; i < doser.length; i++) {
+            if (doser[i] == null) {
+                doser[i] = new Dosis(tid, antal);
                 break;
             }
         }
@@ -39,17 +39,22 @@ public class DagligFast extends Ordination {
 
     @Override
     public double samletDosis() {
-        return 0;
+        double samletDosis = 0;
+
+        for (Dosis dosis : doser) {
+            samletDosis += dosis.getAntal();
+        }
+        return  samletDosis;
     }
 
     @Override
     public double doegnDosis() {
-        return 0;
+        return samletDosis() / antalDage();
     }
 
     @Override
     public String getType() {
-        return "";
+        return "Daglig Fast";
     }
 
     // TODO
