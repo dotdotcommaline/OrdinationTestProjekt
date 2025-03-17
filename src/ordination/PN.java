@@ -22,6 +22,7 @@ public class PN extends Ordination {
      * @param givetDato
      * @return
      */
+    // currentDate -1 kommer an på fast eller skaev og et år frem
     public boolean givDosis(LocalDate givetDato) {
         // TODO
         if (givetDato.isBefore(getStartDato()) || givetDato.isAfter(getSlutDato())) {
@@ -35,9 +36,6 @@ public class PN extends Ordination {
     public double doegnDosis() {
         // TODO
         int antalGange = getAntalGangeGivet();
-        if (antalGange == 0) {
-            return 0.0;
-        }
 
         LocalDate første = dageGivet.get(0);
         LocalDate sidste = dageGivet.get(0);

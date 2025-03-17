@@ -18,6 +18,7 @@ public class DagligSkaev extends Ordination {
         return doser;
     }
 
+    // test ækvivalensklasser LocaleTime tid: 05.59 06.00   double antal: -1 25
     public void opretDosis(LocalTime tid, double antal) {
         // TODO
         int antalNuværendeDosis = 0;

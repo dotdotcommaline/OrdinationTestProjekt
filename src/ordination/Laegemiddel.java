@@ -24,6 +24,7 @@ public class Laegemiddel {
         return navn;
     }
 
+    // ækvivalensklasser int veagt: 24 25 60 120 121
     public double anbefaletDosisPrDoegn(int vaegt) {
         //TODO
         if (vaegt < 25) {
