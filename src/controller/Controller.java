@@ -33,11 +33,15 @@ public class Controller {
 	/**
 	 * @return opretter og returnerer en PN ordination.
 	 */
+	//equals
 	public PN opretPNOrdination(LocalDate startDato, LocalDate slutDato,
-			Patient patient, Laegemiddel laegemiddel, double antal) {
-		PN pn = new PN(startDato, slutDato, patient);
-
-		// TODO
+								Patient patient, Laegemiddel laegemiddel, double antal) {
+		if (checkStartFoerSlut(startDato, slutDato)) {
+			PN pn = new PN(startDato, slutDato, patient);
+			pn.setLaegemiddel(laegemiddel);
+			pn.setAntalEnheder(antal);
+			return pn;
+		}
 		return null;
 	}
 
@@ -45,10 +49,20 @@ public class Controller {
 	 * Opretter og returnerer en DagligFast ordination.
 	 */
 	public DagligFast opretDagligFastOrdination(LocalDate startDato,
-			LocalDate slutDato, Patient patient, Laegemiddel laegemiddel,
-			double morgenAntal, double middagAntal, double aftenAntal,
-			double natAntal) {
-		// TODO
+												LocalDate slutDato, Patient patient, Laegemiddel laegemiddel,
+												double morgenAntal, double middagAntal, double aftenAntal,
+												double natAntal) {
+		if (checkStartFoerSlut(startDato, slutDato)) {
+			DagligFast dagligFast = new DagligFast(startDato, slutDato, patient);
+			dagligFast.setLaegemiddel(laegemiddel);
+
+			dagligFast.opretDosis(LocalTime.of(8, 0), morgenAntal);
+			dagligFast.opretDosis(LocalTime.of(12, 0), middagAntal);
+			dagligFast.opretDosis(LocalTime.of(18, 0), aftenAntal);
+			dagligFast.opretDosis(LocalTime.of(22, 0), natAntal);
+
+			return dagligFast;
+		}
 		return null;
 	}
 
@@ -56,9 +70,18 @@ public class Controller {
 	 * Opretter og returnerer en DagligSkæv ordination.
 	 */
 	public DagligSkaev opretDagligSkaevOrdination(LocalDate startDato,
-			LocalDate slutDato, Patient patient, Laegemiddel laegemiddel,
-			LocalTime[] klokkeSlet, double[] antalEnheder) {
-		// TODO
+												  LocalDate slutDato, Patient patient, Laegemiddel laegemiddel,
+												  LocalTime[] klokkeSlet, double[] antalEnheder) {
+		if (checkStartFoerSlut(startDato, slutDato) && klokkeSlet.length == antalEnheder.length) {
+			DagligSkaev dagligSkaev = new DagligSkaev(startDato, slutDato, patient);
+			dagligSkaev.setLaegemiddel(laegemiddel);
+
+			for (int i = 0; i < klokkeSlet.length; i++) {
+				dagligSkaev.opretDosis(klokkeSlet[i], antalEnheder[i]);
+			}
+
+			return dagligSkaev;
+		}
 		return null;
 	}
 
@@ -66,7 +89,7 @@ public class Controller {
 	 * En dato for hvornår ordinationen anvendes tilføjes ordinationen.
 	 */
 	public void ordinationPNAnvendt(PN ordination, LocalDate dato) {
-		// TODO
+		ordination.givDosis(dato);
 	}
 
 	/**
@@ -75,8 +98,7 @@ public class Controller {
 	 * anvendes, og den er afhængig af patientens vægt.
 	 */
 	public double anbefaletDosisPrDoegn(Patient patient, Laegemiddel laegemiddel) {
-		//TODO
-		return 0;
+		return laegemiddel.anbefaletDosisPrDoegn((int)patient.getVaegt());
 	}
 
 	/**
@@ -85,8 +107,21 @@ public class Controller {
 	 */
 	public int antalOrdinationerPrVaegtPrLaegemiddel(double vaegtStart,
 													 double vaegtSlut, Laegemiddel laegemiddel) {
-		// TODO
-		return 0;
+		int antal = 0;
+
+		for (Patient patient : storage.getAllPatienter()) {
+			double patientVaegt = patient.getVaegt();
+
+			if (patientVaegt >= vaegtStart && patientVaegt <= vaegtSlut) {
+				for (ordination.Ordination ordination : patient.getOrdinationer()) {
+					if (ordination.getLaegemiddel() == laegemiddel) {
+						antal++;
+					}
+				}
+			}
+		}
+
+		return antal;
 	}
 
 	public List<Patient> getAllPatienter() {
@@ -118,8 +153,8 @@ public class Controller {
 	}
 
 	public Laegemiddel opretLaegemiddel(String navn,
-			double enhedPrKgPrDoegnLet, double enhedPrKgPrDoegnNormal,
-			double enhedPrKgPrDoegnTung, String enhed) {
+										double enhedPrKgPrDoegnLet, double enhedPrKgPrDoegnNormal,
+										double enhedPrKgPrDoegnTung, String enhed) {
 		Laegemiddel laegemiddel = new Laegemiddel(navn, enhedPrKgPrDoegnLet,
 				enhedPrKgPrDoegnNormal, enhedPrKgPrDoegnTung, enhed);
 		storage.addLaegemiddel(laegemiddel);
@@ -170,5 +205,4 @@ public class Controller {
 				LocalDate.of(2021, 1, 24), storage.getAllPatienter().get(1),
 				storage.getAllLaegemidler().get(2), kl, an);
 	}
-
 }

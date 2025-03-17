@@ -43,6 +43,7 @@ public abstract class Ordination {
      *
      * @return antal dage ordinationen gælder for
      */
+
     public int antalDage() {
         return (int) ChronoUnit.DAYS.between(startDato, slutDato) + 1;
     }
