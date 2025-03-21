@@ -7,7 +7,6 @@ public class DagligFast extends Ordination {
     private Dosis[] doser = new Dosis[4];
 
 
-
     public DagligFast(LocalDate startDato, LocalDate slutDato, Patient patient) {
         super(startDato, slutDato, patient);
     }
@@ -40,9 +39,11 @@ public class DagligFast extends Ordination {
         double samletDosis = 0;
 
         for (Dosis dosis : doser) {
-            samletDosis += dosis.getAntal();
+            if (dosis != null) {
+                samletDosis += dosis.getAntal();
+            }
         }
-        return  samletDosis;
+        return samletDosis;
     }
 
     @Override

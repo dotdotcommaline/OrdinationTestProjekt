@@ -21,18 +21,6 @@ public class DagligSkaev extends Ordination {
     // test ækvivalensklasser LocaleTime tid: 00.00 23.59   double antal: -1 20
     public void opretDosis(LocalTime tid, double antal) {
         // TODO
-        int antalNuværendeDosis = 0;
-
-        for (Dosis dosis : doser) {
-            antalNuværendeDosis += dosis.getAntal();
-        }
-
-        if (antalNuværendeDosis == 4) {
-            return;
-        } else if (antalNuværendeDosis + antal > 4) {
-            return;
-        }
-
         doser.add(new Dosis(tid, antal));
     }
 
